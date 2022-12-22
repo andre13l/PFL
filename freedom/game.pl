@@ -2,9 +2,9 @@
 
 % MAIN GAME PREDICATE
 play:-
-    nl, nl,
+    nls(2),
     tab(2), write('Let the Game begin...'),
     /* CALL FUNCTIONS FOR THE ACTUAL GAME*/
-    nl, nl.
+    nls(3).
 
 /* WRITE FUNCTIONS HERE*/
