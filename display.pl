@@ -43,6 +43,10 @@ code(9, 181).  % µ - Used for floodFill
 player_piece('Player 1', 1).
 player_piece('Player 2', 0).
 
+% Switch player
+player_swap('Player 1', 'Player 2').
+player_swap('Player 2', 'Player 1').
+
 print_board_middle_separator(1):-
   write('|\n').
 print_board_middle_separator(X):-

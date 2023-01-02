@@ -13,40 +13,6 @@ direction(X-Y, 'right', Xr, Yr):-  Xr is X+1,  Yr = Y.
 direction(X-Y, 'down', Xr, Yr):-   Xr = X,     Yr is Y+1.
 direction(X-Y, 'left', Xr, Yr):-   Xr is X-1,  Yr = Y.
 
-
-% choose_piece(+Board, +PlayerS, -Xtemp, -Ytemp, -Directions)
-% predicate to read input, checks if piece belongs to player, gets available directions and return
-choose_piece(Board, PlayerS, X, Y, Directions):-
-    read_inputs(10, Xread, Yread),
-    validate_choice(Board, Xread, Yread, PlayerS, Xtemp, Ytemp),
-    available_dirs(Board, Xtemp, Ytemp, PlayerS, List),
-    check_list(Board, PlayerS, Xtemp, Ytemp, List, Directions, X, Y).
-% checks if list os available directions is empty, in that case, calls choose_piece again
-check_list(Board, PlayerS, _, _, [], Directions, XFinal, YFinal):-
-    format('~`xt No plays available for that piece ~`xt~57|~n', []),
-    format('~`*t Chose Another Piece ~`*t~57|~n', []),
-    skip_line,
-    choose_piece(Board, PlayerS, XFinal, YFinal, Directions).
-% if List is not empty
-check_list(_,_,X,Y,List,List,X,Y):-
-    format('~`-t There are plays available for that spot ~`-t~57|~n', []).
-     
-% validate_choice(+Board, +Xread, +Yread, +PlayerS, -X, -Y)
-% check if selected piece belongs to player
-validate_choice(Board, Xread, Yread, PlayerS, X, Y):-
-    row(NumbY, Yread),
-    value_in_board(Board, Xread, NumbY, Value),
-    player_piece(PlayerS, Piece),
-    Piece == Value,
-    X = Xread, Y = NumbY,
-    write('- Chose Spot belonging to player\n').
-% if the selected piece doesnt belong to the player, asks again
-validate_choice(Board, _, _, PlayerS, X, Y):-
-    format('~`xt Unavailable piece, try again ~`xt~57|~n', []),
-    skip_line,
-    read_inputs(10, Xread, Yread),
-    validate_choice(Board, Xread, Yread, PlayerS, X, Y).
-
 % value_in_board(+Board, +X, +Y, -Value)
 % returns in Value the value [0,1,-1] at (X,Y) from Board
 value_in_board(Board, X, Y, Value):-
@@ -103,13 +69,10 @@ replace(Board, X, Y, Value, BoardResult):-
     replace_index(X, Row, Value, NewRow),
     replace_index(Y, Board, NewRow, BoardResult).
 
-% move(+GameState, +X, +Y, -NewGameState)
+% move(+GameState, +X, +Y, +A -NewGameState)
 %  performs the change in the board, replaces current piece with 0 and enemy piece with player code
-move(GameState, X, Y, NewGameState):-
-    value_in_board(GameState, X, Y, Code),
-    replace(GameState, X, Y, 0, NewGameState).
-
-
+move(GameState, X, Y, A, NewGameState):-
+    replace(GameState, X, Y, A, NewGameState).
 
 % get_row(+GameState, +Y, -Row)
 % Returns a list in Row corresponding to the Row in the Y index
