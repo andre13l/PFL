@@ -7,50 +7,30 @@ play :-
 
 % start_game(+GameState, +Player1Type, +Player2Type)
 % starts a game with Player1Type vs Player2Type
+/*start game*/
 start_game(GameState, Player1Type, Player2Type):-
   clear, 
   display_game(GameState),
-  turn(GameState, Player1Type, 'Player 1', Player2Type ).
+  turn(GameState, Player1Type, 'Player 1', Player2Type, 100).
 
-% turn(+GameState, +Player, +PlayerS, +NextPlayer)
-% Turn predicate for final game state where player removes a piece instead of moving it
-turn(GameState, Player, PlayerS, NextPlayer):-
-  ( Player = 'Player', format('~n~`*t ~a turn ~`*t~57|~n', [PlayerS]) ;
-    Player \= 'Player', format('~n~`*t Computer turn as ~s ~`*t~57|~n', [PlayerS]) ),
-  check_final(GameState, PlayerS),
-  remove(Player, GameState, PlayerS, NewGameState),
-  game_over(NewGameState, PlayerS, TempResult),
-  process_result(NewGameState, TempResult, Player, NextPlayer, PlayerS).
+% turn(+GameState, +Player, +PlayerS, +NextPlayer, +N)
 % Turn predicate for moving a piece
-turn(GameState, Player, PlayerS, NextPlayer):-
+turn(GameState, Player, PlayerS, NextPlayer, N):-
   make_move(Player, GameState, PlayerS, NewGameState),
-  game_over(NewGameState, PlayerS, TempResult),
-  process_result(NewGameState, TempResult, Player, NextPlayer, PlayerS).
-
-% process_result(+NewGameState, +Winner, +TypePlayer, +TypeToPlay, +PlayerS)
-% Processes the Winner argument, if there are no winners then it's the opponent's turn
-process_result(NewGameState, 'none', TypePlayer, TypeToPlay, PlayerS):-
   clear, 
   display_game(NewGameState),
-  opposed_opponent_string(PlayerS, EnemyS),
-  turn(NewGameState, TypeToPlay, EnemyS, TypePlayer).
-% If theres a winner, the game ends
-process_result(NewGameState, Winner, _, _, _):-
-  clear, 
-  display_game(NewGameState),
-  format('~n~`*t Winner - ~a ~`*t~57|~n', [Winner]),
-  sleep(5), clear.
+  opposed_opponent_string(PlayerS, EnemyS).
+  S is N-1,
+  turn(NewGameState, NextPlayer, EnemyS, Player).
 
 % game_over(+GameState, +Player , -Winner)
 % checks first if enemy is winner
 game_over(GameState, CurrentPlayer, EnemyS):-
-  size_of_board(GameState, Size), 
   opposed_opponent_string(CurrentPlayer, EnemyS),
-  check_win(EnemyS, GameState, Size).
+  check_win(EnemyS, GameState, 10).
 % then checks if player is the winner
 game_over(GameState, CurrentPlayer, CurrentPlayer):-
-  size_of_board(GameState, Size),
-  check_win(CurrentPlayer, GameState, Size).
+  check_win(CurrentPlayer, GameState, 10).
 % in case there is no winner, 'none' is returned
 game_over(_, _, 'none').
 
@@ -66,8 +46,8 @@ check_win('Player 1', GameState, Size):-
 
 % does one floodfill and doesnt repeat on redo
 attemp_flood_fill(Board, X, Y, NewBoard):-
-  size_of_board(Board, Size),
-  floodFill(Board, Size, X, Y, 0, 9, NewBoard), !.
+
+  floodFill(Board, 10, X, Y, 0, 9, NewBoard), !.
 % prolog implementation of the floodFill algorithm
 floodFill(Board, BoardSize, X, Y, PrevCode, NewCode, FinalBoard):-
   X >= 0, X < BoardSize, Y >= 0, Y < BoardSize,

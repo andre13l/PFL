@@ -81,33 +81,16 @@ menu :-
   menu_empty_format,
   menu_option_format(1, 'Player vs Player'),
   menu_option_format(2, 'Player vs Computer'),
-  menu_option_format(3, 'Computer vs Computer'),
-  menu_option_format(4, 'Game Intructions'),
-  menu_option_format(5, 'Information about project'),
+  menu_option_format(3, 'Game Intructions'),
+  menu_option_format(4, 'Information about project'),
   menu_empty_format,
   menu_option_format(0, 'EXIT'),
   menu_empty_format,
   menu_bottom_format,
 
-  read_number(0, 5, Number),
+  read_number(0, 4, Number),
   menu_option(Number).
 
-% menu_board_size_hidden_feature(-Size)
-% The user is asked to select a board size on this menu
-% Menu with an extra option for a hidden feature
-menu_board_size_hidden_feature(Size):-
-  menu_header_format('Choose a Board Size'),
-  menu_empty_format,
-  menu_sec_header_format('Option', 'Details'),
-  menu_empty_format,
-  menu_option_format(1, '6x6'),
-  menu_option_format(2, '8x8'),
-  menu_option_format(3, '10x10'),
-  menu_empty_format,
-  menu_option_format(0, 'EXIT'),
-  menu_empty_format,
-  menu_bottom_format,
-  read_number_hidden(0, 4, Size).
 % menu_board_size(-Size)
 % The user is asked to select a board size on this menu
 menu_board_size(Size):-
@@ -131,21 +114,17 @@ menu_board_size(Size):-
 menu_option(0):-
   banner('Thank You For Playing'),
   proj_logo.
-% Player vs PLayer, need to choose Board Size
+% Player vs PLayer
 menu_option(1):-
-  menu_board_size_hidden_feature(Size),
-  clear, pp_menu(Size).
+  clear,
+  initial(GameState),
+  start_game(GameState, 'Player', 'Player'),
+  menu.
 % Player vs Computer, need to choose Board Size
 menu_option(2):-
   banner('Player vs Computer'),
   menu_board_size(Size),
   pc_menu_1(Size),
-  clear, menu.
-% Computer vs Computer, need to choose Board Size
-menu_option(3):-
-  banner('Computer vs Computer'),
-  menu_board_size(Size),
-  cc_menu_1(Size),
   clear, menu.
 % Game Instructions
 menu_option(4):-
@@ -182,7 +161,7 @@ menu_option(4):-
 
   menu.
 % Information about the Project
-menu_option(5):-
+menu_option(3):-
   menu_bottom_format,
   menu_empty_format,
   menu_text_format('Made By Ana Ramos, Andre Leonor and Guilherme Diogo'),
@@ -196,18 +175,8 @@ menu_option(5):-
 % Choose to exit game on size screen
 pp_menu(0):-
   menu.
-% Hidden Feature
-pp_menu(4):-
-  write('You found a Hidden Feature, Have Fun!\n'),
-  sleep(3),
-  initial(4, GameState),
-  start_game(GameState, 'Player', 'Player'),
-  menu.
-% Choose Size, Starting Game
-pp_menu(Size):-
-  initial(Size, GameState),
-  start_game(GameState, 'Player', 'Player'),
-  menu.
+/*player vs player*/
+  
 
 % pc_menu_1(+Size)
 % Menus with information related to games Player vs Computer
@@ -265,19 +234,19 @@ pc_menu_2(Size, Difficulty):-
 pc_option(_,_,0).
 % Start an Human vs PC game with Human as P1 and PC on Easy and board with BoardSize
 pc_option(Size, 1, 1):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Player', 'Easy').
 % Start an Human vs PC game with Human as P2 and PC on Easy and board with BoardSize
 pc_option(Size, 1, 2):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Easy', 'Player').
 % Start an Human vs PC game with Human as P1 and PC on Normal and board with BoardSize
 pc_option(Size, 2, 1):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Player', 'Normal').
 % Start an Human vs PC game with Human as P2 and PC on Normal and board with BoardSize
 pc_option(Size, 2, 2):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Normal', 'Player').
 
 % cc_menu_1(+Size)
@@ -336,17 +305,17 @@ cc_menu_2(Size, Diff1):-
 cc_option(_,_,0).
 % Starts a game for PC vs PC with P1 and P2 on Easy and board with BoardSize
 cc_option(Size, 1, 1):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Easy', 'Easy').
 % Starts a game for PC vs PC with P1 on Easy and P2 on Normal and board with BoardSize
 cc_option(Size, 1, 2):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Easy', 'Normal').
 % Starts a game for PC vs PC with P1 on Normal and P2 on Easy and board with BoardSize
 cc_option(Size, 2, 1):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Normal', 'Easy').
 % Starts a game for PC vs PC with P1 on Normal and P2 on Normal and board with BoardSize
 cc_option(Size, 2, 2):-
-  initial(Size, GameState),
+  initial(GameState),
   start_game(GameState, 'Normal', 'Normal').

@@ -11,7 +11,7 @@ code_number(56, 8).
 code_number(57, 9).
 
 % read_inputs(+Size, -X, -Y)
-% Reads a Column and Row according to Size (of Board)
+% Reads a Column and Row 
 read_inputs(Size, X, Y):-
   read_column(Column, Size),
   check_column(Column, X, Size),
@@ -43,16 +43,16 @@ check_column(_, CheckedColumn, Size) :-
 % read_row(-Row, +Size)
 % predicate to read row from user
 read_row(Row, Size) :-
-  Size1 is Size-1,
-  row(Size1, Letter),
-  format('| Row (A-~s) -    ', Letter),
-  get_char(Row).
+  format('| Row (0-~d) - ', Size-1),
+  get_code(Row).
 
-% check_row(+Rowread, -CheckedRow, +Size)
+% check_row(+Testing, -CheckedColumn, +Size)
 % checking rows
-check_row(Rowread, RowreadUpper, Size) :-
-  (row(RowNumb, Rowread) ; row_lower(RowNumb, Rowread)), RowNumb < Size, RowNumb >= 0, 
-  row(RowNumb, RowreadUpper). % Gets Capital letter, ic case it reads lowercase letter
+check_row(Testing, Number, Size) :-
+  peek_char(Char),
+  Char == '\n',
+  code_number(Testing, Number),
+  Number < Size, Number >= 0, skip_line.
 % if not between A-y then try again
 check_row(_, CheckedRow, Size) :-
   write('~ Invalid row\n| Select again\n'),
@@ -126,18 +126,5 @@ read_number(LowerBound, UpperBound, Number):-
   code_number(NumberASCII, Number),
   Number =< UpperBound, Number >= LowerBound, skip_line.
 read_number(LowerBound, UpperBound, Number):-
-  write('Not a valid number, try again\n'), skip_line,
-  read_number(LowerBound, UpperBound, Number).
-
-% read_number_hidden(+LowerBound, +UpperBound, -Number)
-% predicate used for secret function
-read_number_hidden(LowerBound, UpperBound, Number):-
-  format('| Choose an Option (~d-~d) - ', [LowerBound, UpperBound-1]),
-  get_code(NumberASCII),
-  peek_char(Char),
-  Char == '\n',
-  code_number(NumberASCII, Number),
-  Number =< UpperBound, Number >= LowerBound, skip_line.
-read_number_hidden(LowerBound, UpperBound, Number):-
   write('Not a valid number, try again\n'), skip_line,
   read_number(LowerBound, UpperBound, Number).

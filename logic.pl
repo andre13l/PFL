@@ -17,8 +17,7 @@ direction(X-Y, 'left', Xr, Yr):-   Xr is X-1,  Yr = Y.
 % choose_piece(+Board, +PlayerS, -Xtemp, -Ytemp, -Directions)
 % predicate to read input, checks if piece belongs to player, gets available directions and return
 choose_piece(Board, PlayerS, X, Y, Directions):-
-    size_of_board(Board, Size),
-    read_inputs(Size, Xread, Yread),
+    read_inputs(10, Xread, Yread),
     validate_choice(Board, Xread, Yread, PlayerS, Xtemp, Ytemp),
     available_dirs(Board, Xtemp, Ytemp, PlayerS, List),
     check_list(Board, PlayerS, Xtemp, Ytemp, List, Directions, X, Y).
@@ -44,9 +43,8 @@ validate_choice(Board, Xread, Yread, PlayerS, X, Y):-
 % if the selected piece doesnt belong to the player, asks again
 validate_choice(Board, _, _, PlayerS, X, Y):-
     format('~`xt Unavailable piece, try again ~`xt~57|~n', []),
-    size_of_board(Board, Size),
     skip_line,
-    read_inputs(Size, Xread, Yread),
+    read_inputs(10, Xread, Yread),
     validate_choice(Board, Xread, Yread, PlayerS, X, Y).
 
 % value_in_board(+Board, +X, +Y, -Value)
@@ -77,14 +75,13 @@ check_dir(Board, X, Y, PlayerS, 'up', ['up']):-
     Y > 0, Y1 is Y-1, value_in_board(Board, X, Y1, Value), Value==ExpectedCode.
 % Checks if there is an enemy piece on the 'right' direction
 check_dir(Board, X, Y, PlayerS, 'right', ['right']):-
-    size_of_board(Board, Size),
+
     opposed_opponent_code(PlayerS, ExpectedCode),
-    X < Size, X1 is X+1, value_in_board(Board, X1, Y, Value), Value==ExpectedCode.
+    X < 10, X1 is X+1, value_in_board(Board, X1, Y, Value), Value==ExpectedCode.
 % Checks if there is an enemy piece on the 'down' direction
 check_dir(Board, X, Y, PlayerS, 'down', ['down']):-
-    size_of_board(Board, Size),
     opposed_opponent_code(PlayerS, ExpectedCode),
-    Y < Size, Y2 is Y+1, value_in_board(Board, X, Y2, Value), Value==ExpectedCode.
+    Y < 10, Y2 is Y+1, value_in_board(Board, X, Y2, Value), Value==ExpectedCode.
 % Checks if there is an enemy piece on the 'left' direction
 check_dir(Board, X, Y, PlayerS, 'left', ['left']):-
     opposed_opponent_code(PlayerS, ExpectedCode),
@@ -106,67 +103,13 @@ replace(Board, X, Y, Value, BoardResult):-
     replace_index(X, Row, Value, NewRow),
     replace_index(Y, Board, NewRow, BoardResult).
 
-% move(+GameState, +X-Y-Direction, -NewGameState)
+% move(+GameState, +X, +Y, -NewGameState)
 %  performs the change in the board, replaces current piece with 0 and enemy piece with player code
-move(GameState, X-Y-Direction, NewGameState):-
+move(GameState, X, Y, NewGameState):-
     value_in_board(GameState, X, Y, Code),
-    replace(GameState, X, Y, 0, Board1),
-    direction(X-Y, Direction, X1, Y1),
-    replace(Board1, X1, Y1, Code, NewGameState).
+    replace(GameState, X, Y, 0, NewGameState).
 
-% check_final(+GameState, +PlayerS)
-% Predicate to check if the game as reached its final state (i.e. starting to remove pieces)
-check_final(GameState, PlayerS):-
-  check_final_state(GameState, PlayerS, 0, 0).
 
-% check_final_state(+GameState, +PlayerS, +X, +Y)
-/* predicate to check if game as reached its final state */
-
-% if check_no_neightbors returs 0, ends predicate   
-check_final_state(GameState, PlayerS, X, Y):-
-    value_in_board(GameState, X, Y, Value),
-    check_no_neighbors(GameState, PlayerS, X, Y, Value, 0), !, fail.
-% check_no_neighbors returned 1, there are not directions available, checking if reached end of board
-% if reached end of board, then returns, else fails and continues to next predicate
-check_final_state(GameState, _, X, Y):-
-    size_of_board(GameState, Length),
-    check_end(X, Y, Length).
-% checks if next position has directions available
-check_final_state(GameState, PlayerS, X, Y):-
-    size_of_board(GameState, Length),
-    next_index(X, Y, Length, X2, Y2),
-    check_final_state(GameState, PlayerS, X2, Y2).
-
-% next_index(+X, +Y, +Length, -X2, -Y2)
-% gets next index and verifies if reached end of Row,  in that case switches to the next row
-next_index(X, Y, Length, X2, Y2):-
-    X1 is X + 1,
-    X1 \== Length,
-    X2 is X1, 
-    Y2 is Y.
-next_index(X, Y, Length, X2, Y2):-
-    X1 is X + 1,
-    X1 == Length, 
-    X2 is 0,
-    Y2 is Y + 1.
-
-% check_end(+X, +Y, +Length)
-% used before calling next_index to check if current position is the last in the board
-check_end(X, Y, Length):-
-    X is (Length - 1),
-    Y is (Length - 1).
-
-% check_no_neighbors(+Board, +PlayerS, +X, +Y, +Value, -Return)
-% checks if there are directions available, if the list is empty goes to next predicate, else return is 0
-check_no_neighbors(Board, PlayerS, X, Y, Value, 0):-
-    player_piece(PlayerS, Value),
-    available_dirs(Board, X, Y, PlayerS, [_]).
-% if list of directions is empty, returns 1
-check_no_neighbors(Board, PlayerS, X, Y, Value, 1):-
-    player_piece(PlayerS, Value),
-    available_dirs(Board, X, Y, PlayerS, []).
-% if the player piece is different from the value on the board, no need to check for directions
-check_no_neighbors(_, _, _, _, _, 1).
 
 % get_row(+GameState, +Y, -Row)
 % Returns a list in Row corresponding to the Row in the Y index
