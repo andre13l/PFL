@@ -15,9 +15,9 @@ direction(X-Y, 'left', Xr, Yr):-   Xr is X-1,  Yr = Y.
 
 % choose_piece(+Board, -X, -Y)
 % predicate to read input, checks if piece belongs to player, gets available directions and return
-choose_piece(Board, X, Y):-
-    read_inputs(10, X, Y),
-    validate_choice(Board, X, Y).
+choose_piece(Board, Xread, Yread, X, Y):-
+    read_inputs(Xread, Yread),
+    validate_choice(Board, Xread, Yread, X, Y).
 % checks if list of available directions is empty, in that case, calls choose_piece again
 check_list(Board, PlayerS, [], XFinal, YFinal):-
     format('~`xt No plays available for that piece ~`xt~57|~n', []),
@@ -30,15 +30,19 @@ check_list(_,_,List,X,Y):-
      
 % validate_choice(+Board, +Xread, +Yread)
 % check if selected piece belongs to player
-validate_choice(Board, Xread, Yread):-
+validate_choice(Board, Xread, Yread, X, Y):-
     value_in_board(Board, Xread, NumbY, Value),
-    Value =\= 1.
-% if the selected piece doesnt belong to the player, asks again
-validate_choice(Board, _, _):-
+    Value =\= -1,
     format('~`xt Unavailable piece, try again ~`xt~57|~n', []),
     skip_line,
-    read_inputs(10, Xread, Yread),
-    validate_choice(Board, Xread, Yread).
+    read_inputs(Xread, Yread),
+    validate_choice(Board, Xread, Yread, X, Y).
+    
+% if the selected piece doesnt belong to the player, asks again
+validate_choice(Board, Xread, Yread, X, Y):-
+    X = Xread,
+    Y = Yread,
+    write('Oupa').
 
 % value_in_board(+Board, +X, +Y, -Value)
 % returns in Value the value [0,1,-1] at (X,Y) from Board
