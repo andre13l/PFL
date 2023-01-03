@@ -36,7 +36,6 @@ check_column(Testing, Number, Size) :-
 % if not between 0-x then try again
 check_column(_, CheckedColumn, Size) :-
   write('~ Invalid column\n| Select again\n'),
-  skip_line,
   read_column(Column, Size),
   check_column(Column, CheckedColumn, Size).
 
@@ -56,7 +55,6 @@ check_row(Testing, Number, Size) :-
 % if not between A-y then try again
 check_row(_, CheckedRow, Size) :-
   write('~ Invalid row\n| Select again\n'),
-  skip_line,
   read_row(Row, Size),
   check_row(Row, CheckedRow, Size).
   

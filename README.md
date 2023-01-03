@@ -58,13 +58,6 @@ Se uma peça estiver em mais do que uma linha de 4 peças consecutivas (4-em-lin
 
 ### Representação interna do estado do jogo
 
->Indicação de como representam o estado do jogo, incluindo:
->* tabuleiro (tipicamente usando lista de listas com diferentes átomos para as peças) :heavy_check_mark:
->* jogador atual :heavy_check_mark:
->* e eventualmente peças capturadas e/ou ainda por jogar
->* ou outras informações que possam ser necessárias (dependendo do jogo) 
->
->Deve incluir exemplos da representação em Prolog de estados de jogo inicial, intermédio e final, e indicação do significado de cada átomo (ie., como representam as diferentes peças).:heavy_check_mark:
 
 #### Tabuleiro
 
@@ -142,16 +135,8 @@ player_piece('Player 2', 0).
 
 ### Visualização do estado de jogo
 
->Descrição da implementação do predicado de visualização do estado de jogo.
->Pode incluir informação sobre:
->* o sistema de menus criado,
->* assim como interação com o utilizador, incluindo formas de validação de entrada. 
->
->O predicado de visualização deverá chamar-se display_game(+GameState), recebendo o estado atual do jogo (que inclui o jogador que efetuará a próxima jogada).
-> 
->Serão valorizadas visualizações apelativas e intuitivas.
->
->Serão também valorizadas representações de estado de jogo e implementação de predicados de visualização flexíveis, por exemplo, funcionando para qualquer tamanho de tabuleiro, usando um predicado initial_state(+Size, -GameState) que recebe o tamanho do tabuleiro como argumento e devolve o estado inicial do jogo.
+
+Foi implementado, como pedido, o predicado de visualização do jogo, `display_game(+GameState)`, que vai receber o estado atual do jogo e imprimir o tabuleiro, preenchendo-o de acordo com o estado do jogo, permitindo, assim, a visualização, em tempo real, do que está a aconter no jogo.
 
 ```prolog
 % display_game(+GameState)
@@ -164,41 +149,112 @@ display_game(GameState):-
   print_line_codes(10, P).
 ```
 
+#### Menus
+
+Para este jogo, foram desenvolvidos vários menus com o objetivo de criar um leque de opções que o jogador pudesse escolher, sendo depois lido e processado o *input* do jogador.
+
+Logo no ínicio do jogo, temos, então, o menu principal, controlado pelo predicado `menu/0`, que permite ao jogador escolher qual opção quer entre as quais:
+* jogar no modo *Jogador contra Jogador*
+* jogar no modo *Jogador contra Computador*
+* ver as intruções/regras do jogo
+* ver informações sobre o projeto em si
+
+```prolog
+% menu/0
+% This is the main menu, with all the options available
+menu :-
+  menu_header_format('MAIN MENU'),
+  menu_empty_format,
+  menu_sec_header_format('Option', 'Details'),
+  menu_empty_format,
+  menu_option_format(1, 'Player vs Player'),
+  menu_option_format(2, 'Player vs Computer'),
+  menu_option_format(3, 'Game Intructions'),
+  menu_option_format(4, 'Information about project'),
+  menu_empty_format,
+  menu_option_format(0, 'EXIT'),
+  menu_empty_format,
+  menu_bottom_format,
+
+  read_number(0, 4, Number),
+  menu_option(Number).
+```
+
+#### Formas de validação de entrada
+
+Para validar o input introduzido pelo jogador, nós temos várias funções, mas a principal que trata de verificar se um movimento escolhido por um jogador é um movimento válido, é o predicado `validate_choice/3`:
+
+```prolog
+% validate_choice(+Board, +Xread, +Yread)
+% check if selected slot is playable
+validate_choice(Board, Xread, Yread):-
+    value_in_board(Board, Xread, Yread, Value),
+    Value == -1.
+```
+
+Depois, também há o predicado que vai especificamente verificar o input introduzido, `read_inputs/3`:
+```prolog
+% read_inputs(+Size, -X, -Y)
+% Reads a Column and Row 
+read_inputs(Size, X, Y):-
+  read_column(Column, Size),
+  check_column(Column, X, Size),
+  format(': Column read :  ~d\n', X),
+  read_row(Row, Size),
+  check_row(Row, Y, Size),
+  format(': Row read :     ~w\n', Y).
+```
+
 ### Execução de Jogadas
 
->Validação e execução de uma jogada, obtendo o novo estado do jogo.
->O predicado deve chamar-se move(+GameState, +Move, -NewGameState).
+Para permitir ao jogador executar uma jogada, foi implementado o predicado `move(+GameState, +Move, -NewGameState)`:
 
+```prolog!
+% move(+GameState, +X, +Y, +A -NewGameState)
+%  performs the change in the board, replaces the current empty space with player code
+move(GameState, X, Y, A, NewGameState):-
+    replace(GameState, X, Y, A, NewGameState).
+```
+Este recebe o estado atual do jogo, o movimento que o jogador pretende fazer, e vai devolver o estado do jogo atualizado (após o movimento do jogador).
 
 ### Lista de Jogadas Válidas
 
->Obtenção de lista com jogadas possíveis.
->O predicado deve chamar-se valid_moves(+GameState, +Player, -ListOfMoves).
+> `valid_moves(+GameState, +Player, -ListOfMoves)` não foi implementado
 
 
 ### Final do Jogo
 
->Verificação do fim do jogo, com identificação do vencedor.
->O predicado deve chamar-se game_over(+GameState, -Winner).
+> `game_over(+GameState, -Winner)` não foi implementado
 
 
 ### Avaliação do Tabuleiro
 
->Forma(s) de avaliação do estado do jogo.
->O predicado deve chamar-se value(+GameState, +Player, -Value).
-
+> `value(+GameState, +Player, -Value)` não foi implementado
 
 ### Jogada do Computador
 
->Escolha da jogada a efetuar pelo computador, dependendo do nível de dificuldade.
->
->O predicado deve chamar-se choose_move(+GameState, +Player, +Level, -Move).
->
->O nível 1 deverá devolver uma jogada válida aleatória. O nível 2 deverá devolver a melhor jogada no momento (algoritmo greedy), tendo em conta a avaliação do estado de jogo.
+> `choose_move(+GameState, +Player, +Level, -Move)` não foi implementado
 
 
 ## Conclusões
 
 ### Limitações do Trabalho Desenvolvido (known issues)
 
+Neste projeto, houve algumas dificuldades por parte do grupo para finalizar o jogo, seguindo todos os passos pedidos. Nomeadamente, faltaria implementar os modos de jogo de *Jogador contra Computador* pois não se conseguiu implementar as regras do jogo para poder fazer com que o computador jogasse de acordo com as regras. Também não se conseguiu terminar os restantes predicados pedidos relacionados com o final do jogo.
+
 ### Possíveis Melhorias Identificadas (roadmap) 
+
+Para melhorar o trabalho, nós identificamos como principais metas:
+* implementar o predicado que verfica se o jogo terminou
+* implementar o predicado que lista as jogadas possíveis
+* implementar o predicado que avalia o tabuleiro
+* implementar um adversário que apenas joga aleatóriamente uma jogada válida
+* implementar um adversário que consegue prever qual a melhor jogada a se fazer (através de um algoritmo greedy)
+* implementar um tamanho de tabuleiro variável
+
+
+## Bibliografia
+* https://www.iggamecenter.com/en/rules/freedom
+* https://freedomtable.wordpress.com/2010/05/26/3/
+* https://www.swi-prolog.org/
+* https://cs.union.edu/~striegnk/learn-prolog-now/html/

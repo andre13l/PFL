@@ -1,6 +1,5 @@
 % initial(+Identifier, -Board)
 % Initial board 
-/*este*/
 initial([
   [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
   [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
@@ -47,6 +46,9 @@ player_piece('Player 2', 0).
 player_swap('Player 1', 'Player 2').
 player_swap('Player 2', 'Player 1').
 
+
+/* BOARD PRINTING */
+
 print_board_middle_separator(1):-
   write('|\n').
 print_board_middle_separator(X):-
@@ -55,18 +57,18 @@ print_board_middle_separator(X):-
 % When the counter reaches 0, it ends
 print_matrix([], 8, _).
 print_matrix([L|T], N, X) :-
-  code(1,P), write(' '), write(N), write(' | '),put_code(P), write(' | '),
+  code(1,P), write(' '), write(N), write(' | '), write(' | '),
   N1 is N + 1,
   print_line(L), nl,
-  N < X - 1, write('---+   | - '), print_board_middle_separator(X),
+  N < X - 1, write('---+  | - '), print_board_middle_separator(X),
   print_matrix(T, N1, X).
 print_matrix(_, _, X):-
-  write('---+   *---'),
+  write('---+  *---'),
   print_board_separator(X).
 
 % Prints a line of the board
 print_line([]):-
-  code(1,P), put_code(P).
+  write(' ').
 print_line([C|L]) :-
   code(C, P),put_code(P), write(' | '),
   print_line(L).
@@ -80,11 +82,6 @@ print_separator(0):-
   write('|\n').
 print_separator(X):-
   write('+---'), X1 is X-1, print_separator(X1).
-  
-print_line_codes(0, _):-
-  write('\n').
-print_line_codes(X, P):-
-  put_code(P), write('   '), X1 is X-1, print_line_codes(X1, P).
 
 print_board_separator(1):-
   write('*\n').
@@ -92,13 +89,11 @@ print_board_separator(X):-
   write('+---'), X1 is X-1, print_board_separator(X1).
 
 print_header(P, X):-
-  write('       |'),
+  write('      |'),
   print_header_numbers(0, X),
-  write('       '),
+  write('      '),
   print_separator(X),
-  write('         '), 
-  print_line_codes(X, P),
-  write('---+   *---'),
+  write('---+  *---'),
   print_board_separator(X).
 
 % Prints the board according to its state
@@ -106,5 +101,4 @@ display_game(Board):-
   nl, code(0, P),
   print_header(P, 10),
   print_matrix(Board, 0, 10),
-  write('         '),
-  print_line_codes(10, P).
+  write('         ').
