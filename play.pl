@@ -35,12 +35,4 @@ turn(GameState, Player, PlayerS, NextPlayer, N):-
   S is N-1,
   turn(NewGameState, NextPlayer, EnemyS, Player, S).
 
-% game_over(+GameState, +PlayerS , +EnemyS, -P1, -P2)
-% checks first if enemy is winner
-count_points(GameState, PlayerS, EnemyS, P1, P2):-
-  player_piece(PlayerS, V1),
-  player_piece(EnemyS, V2),
-
-horizontal(GameState, Players, P):-
-  
   

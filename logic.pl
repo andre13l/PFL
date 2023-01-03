@@ -8,32 +8,16 @@ choose_piece(Board, X, Y):-
     read_inputs(10, X, Y),
     validate_choice(Board, X, Y).
 choose_piece(Board, _, _):-
-    format('~`xt Unavailable piece, try again ~`xt~57|~n', []),
-    skip_line,
+    format('~`xt The field you chose is unavailable, try again ~`xt~57|~n', []),
     read_inputs(10, Xread, Yread),
-    validate_choice(Board, Xread, Yread).
+    choose_piece(Board, Xread, Yread).
    
 % validate_choice(+Board, +Xread, +Yread)
 % check if selected slot is playable
 validate_choice(Board, Xread, Yread):-
     value_in_board(Board, Xread, Yread, Value),
     Value == -1.
-% if the selected slot isnt available, asks again
-/*validate_choice(Board, _, _):-
-    format('~`xt Unavailable piece, try again ~`xt~57|~n', []),
-    skip_line,
-    read_inputs(10, Xread, Yread),
-    validate_choice(Board, Xread, Yread).*/
-/*
-% check_slot_empty(+Board, +Xread, +Yread)
-% checks if the selected slot is empty
-check_slot_empty(Board, Xread, Yread):-
-    value_in_board(Board, Xread, Yread, Value),
-    Value == -1.
 
-% check_if_adjacent(+Board, +)
-% checks if the slot belongs to list of playable slots
-*/
 
 % value_in_board(+Board, +X, +Y, -Value)
 % returns in Value the value [0,1,-1] at (X,Y) from Board

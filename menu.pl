@@ -135,7 +135,7 @@ menu_option(2):-
   pc_menu_1(Size),
   clear, menu.
 % Game Instructions
-menu_option(4):-
+menu_option(3):-
   clear,
   menu_header_format('INSTRUCTIONS'),
   menu_empty_format,
@@ -169,7 +169,7 @@ menu_option(4):-
 
   menu.
 % Information about the Project
-menu_option(3):-
+menu_option(4):-
   menu_bottom_format,
   menu_empty_format,
   menu_text_format('Made By Ana Ramos, Andre Leonor and Guilherme Diogo'),
@@ -184,7 +184,7 @@ menu_option(3):-
 pp_menu(0):-
   menu.
 
-  
+
 /*player vs player*/
   
 
