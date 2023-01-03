@@ -32,8 +32,7 @@ check_list(_,_,List,X,Y):-
 % check if selected piece belongs to player
 validate_choice(Board, Xread, Yread):-
     value_in_board(Board, Xread, NumbY, Value),
-    Value == -1,
-    write('- Can move there\n').
+    Value =\= 1.
 % if the selected piece doesnt belong to the player, asks again
 validate_choice(Board, _, _):-
     format('~`xt Unavailable piece, try again ~`xt~57|~n', []),

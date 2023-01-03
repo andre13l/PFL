@@ -103,7 +103,7 @@ print_header(P, X):-
 
 % Prints the board according to its state
 display_game(Board):- 
-  nl, code(-1, P),
+  nl, code(0, P),
   print_header(P, 10),
   print_matrix(Board, 0, 10),
   write('         '),
