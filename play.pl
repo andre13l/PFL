@@ -35,3 +35,26 @@ turn(GameState, Player, PlayerS, NextPlayer, N):-
   S is N-1,
   turn(NewGameState, NextPlayer, EnemyS, Player, S).
 
+% game_over(+GameState, +Player , -Winner)
+% checks first if enemy is winner
+game_over(GameState, CurrentPlayer, EnemyS):-
+  size_of_board(GameState, Size), 
+  opposed_opponent_string(CurrentPlayer, EnemyS),
+  check_win(EnemyS, GameState, Size).
+% then checks if player is the winner
+game_over(GameState, CurrentPlayer, CurrentPlayer):-
+  size_of_board(GameState, Size),
+  check_win(CurrentPlayer, GameState, Size).
+% in case there is no winner, 'none' is returned
+game_over(_, _, 'none').
+
+% check_win(+PlayerS, +GameState, +K, -Result)
+% to check the win for Player 1, we can check the win for Player 1 with the transposed matrix
+check_win('Player 2', GameState, X):-
+  transpose(GameState, Transpose),
+  check_win('Player 1', Transpose, X).
+
+check_win('Player 1', GameState, Size):-
+  value(GameState, 'Player 1', Value),
+  Value == Size.
+

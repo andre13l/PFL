@@ -59,63 +59,7 @@ check_row(_, CheckedRow, Size) :-
   skip_line,
   read_row(Row, Size),
   check_row(Row, CheckedRow, Size).
-
-% print_directions(+List)
-print_directions([]).
-% prints the available directions
-print_directions([Dir|Rest]):-
-  direction(Number, Dir),
-  menu_option_format(Number, Dir),
-  print_directions(Rest).
   
-% read_direction(+List, -DirSelected)
-% prints avaialble directions, reads input and processes it
-read_direction(List, DirSelected):-
-  menu_header_format('Select Direction'),
-  menu_empty_format,
-  menu_sec_header_format('Option', 'Direction'),
-  menu_empty_format,
-  print_directions(List),
-  menu_empty_format,
-  menu_bottom_format,
-  skip_line,
-  get_code(CodeRead),
-  check_direction_input(List, CodeRead, NumberRead),
-  write('- Read valid direction (1-4)\n'), 
-  check_direction(List, NumberRead, DirSelected),
-  DirSelected \== ''.
-  
-% check_direction_input(+List, +CharRead, -Number)
-% checks if input is between 1 and 4
-check_direction_input(_, CharRead, Number):-
-  peek_char(Char),
-  Char == '\n',
-  code_number(CharRead, Number),
-  Number < 5, Number > 0.
-% if theres bad input, a message is printed and asks again for input
-check_direction_input(List, _, NumberRead):-
-  format('~`xt Invalid Number. Select again ~`xt~57|~n', []),
-  menu_header_format('Select Direction'),
-  menu_empty_format,
-  menu_sec_header_format('Option', 'Direction'),
-  menu_empty_format,
-  print_directions(List),
-  menu_empty_format,
-  menu_bottom_format,
-  skip_line,
-  get_code(CodeRead),
-  check_direction_input(List, CodeRead, NumberRead).
-
-% check_direction(+List, +NumberRead, -Dir)
-% check if number read is equal to one of the directions available
-check_direction([Dir|_], NumberRead, Dir):-
-  direction(NumberRead, Dir).
-% checks next direction available
-check_direction([_|Rest], NumberRead, Direction):-
-  check_direction(Rest, NumberRead, Direction).
-% if there are no more available directions, then returns ''
-check_direction([], _, ''):- write('~ Not an available direction, choose correctly!\n').
-
 % read_number(+LowerBound, +UpperBound, -Number)
 % used in menus to read inputs between the Lower and Upper Bounds
 read_number(LowerBound, UpperBound, Number):-

@@ -1,5 +1,5 @@
 % initial(+Identifier, -Board)
-% Initial board with pieces in chess formation
+% Initial board 
 /*este*/
 initial([
   [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1],
