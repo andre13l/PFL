@@ -8,37 +8,42 @@ option_dif(2, 'Normal').
 clear :- write('\33\[2J').
 
 proj_logo :-
-    write('######## ######## ######## ######## ## ##    ######## ##    ##  \n'),
-    write('##       ##    ## ##       ##       ##  ##   ##    ## ###  ###  \n'),
-    write('##       ##    ## ##       ##       ##   ##  ##    ## ## ## ##  \n'),
-    write('## ##    ## ## ## ## ##    ## ##    ##    ## ##    ## ##    ##  \n'),
-    write('##       ## ##    ##       ##       ##   ##  ##    ## ##    ##  \n'),
-    write('##       ##  ##   ##       ##       ##  ##   ##    ## ##    ##  \n'),
-    write('##       ##   ##  ######## ######## ## ##    ######## ##    ##  \n').
+  write('######## ########  ######## ######## ########   #######  ##     ##   \n'),
+  write('##       ##     ## ##       ##       ##     ## ##     ## ###   ###   \n'),
+  write('##       ##     ## ##       ##       ##     ## ##     ## #### ####   \n'),
+  write('######   ########  ######   ######   ##     ## ##     ## ## ### ##   \n'),
+  write('##       ##   ##   ##       ##       ##     ## ##     ## ##     ##   \n'),
+  write('##       ##    ##  ##       ##       ##     ## ##     ## ##     ##   \n'),
+  write('##       ##     ## ######## ######## ########   #######  ##     ##   \n').
 
 % menu_header_format(+Header)
 % prints the header of a menu (UX)
 menu_header_format(Header):-
   format('~n~`*t ~p ~`*t~57|~n', [Header]).
+
 % menu_option_format(+Option, +Details)
 % prints the option number and associated details in a menu-like format (UX)
 menu_option_format(Option, Details):-
   format('*~t~d~t~15|~t~a~t~40+~t*~57|~n',
         [Option, Details]).
+
 % menu_text_format(+Text)
 % Prints a center-aligned text inside a menu (UX)
 menu_text_format(Text):-
   format('*~t~a~t*~57|~n', [Text]).
+
 % menu_empty_format/0
 % Prints an empty line inside a menu (UX)
 menu_empty_format :-
   format('*~t*~57|~n', []).
+
 % menu_sec_header_format(+Label1, +Label2)
 % Prints an header with 2 columns for a secundary table (UX)
 % This is used for better user readability
 menu_sec_header_format(Label1, Label2):-
   format('*~t~a~t~15+~t~a~t~40+~t*~57|~n',
           [Label1, Label2]).
+
 % menu_bottom_format/0
 % Prints a row of '*' to end the menu (UX)
 menu_bottom_format :-
@@ -50,6 +55,7 @@ banner(String):-
   format('~n~`*t~57|~n', []),
   format('*~t~a~t*~57|~n', [String]),
   format('~`*t~57|~n', []).
+
 % banner(+String, +BoardSize)
 % Prints a banner with info related to board size
 % It is used to inform the user whats being selected
@@ -57,6 +63,7 @@ banner(String, BoardSize):-
   format('~n~`*t~57|~n', []),
   format('*~t~a - ~dx~d Board~t*~57|~n', [String, BoardSize, BoardSize]),
   format('~`*t~57|~n', []).
+
 % banner(+String, +BoardSize, +Difficulty)
 % Prints a banner with info related to board size and Difficulty
 % It is used to inform the user whats being selected
@@ -64,6 +71,7 @@ banner(String, BoardSize, Difficulty):-
   format('~n~`*t~57|~n', []),
   format('*~t~a (~a) - ~dx~d Board~t*~57|~n', [String, Difficulty, BoardSize, BoardSize]),
   format('~`*t~57|~n', []).
+
 % banner_bot(+BoardSize, +Difficulty)
 % Prints a banner with info related to board size and Difficulty but only for PC vs PC
 % It is used to inform the user whats being selected
@@ -175,6 +183,8 @@ menu_option(3):-
 % Choose to exit game on size screen
 pp_menu(0):-
   menu.
+
+  
 /*player vs player*/
   
 

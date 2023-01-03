@@ -1,4 +1,4 @@
-  % make_move(+Difficulty, +GameState, +Player, -NewGameState)
+% make_move(+Difficulty, +GameState, +Player, -NewGameState)
 % Player Predicate move belongs to logic.pl but needs to be together with the bot predicate
 make_move('Player', GameState, PlayerS, NewGameState) :-
   Player = 'Player', format('~n~`*t ~a turn ~`*t~57|~n', [PlayerS]), 
