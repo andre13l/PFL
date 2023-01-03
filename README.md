@@ -251,3 +251,10 @@ Para melhorar o trabalho, nós identificamos como principais metas:
 * implementar um adversário que apenas joga aleatóriamente uma jogada válida
 * implementar um adversário que consegue prever qual a melhor jogada a se fazer (através de um algoritmo greedy)
 * implementar um tamanho de tabuleiro variável
+
+
+## Bibliografia
+* https://www.iggamecenter.com/en/rules/freedom
+* https://freedomtable.wordpress.com/2010/05/26/3/
+* https://www.swi-prolog.org/
+* https://cs.union.edu/~striegnk/learn-prolog-now/html/
